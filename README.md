@@ -7,7 +7,7 @@
 ``` bash
 ### Install dependencies
 npm install
-// or
+# or
 yarn
 
 ### Start dev server with hot reload
