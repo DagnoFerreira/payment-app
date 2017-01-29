@@ -6,8 +6,9 @@
         type="button"
         v-for="(step, counter) in steps"
         :key="step.target"
-        :class="{ 'active': currentTarget === step.target }"
-        @click="changeStep(step.target)">
+        :class="getActionClasses(counter + 1)"
+        :disabled="lastCompleted < counter + 1"
+        @click="changeStep(counter)">
         <span class="form-stepper-indicator">{{ counter + 1 }}</span>
         <span class="form-stepper-label">{{ step.name }}</span>
       </button>
@@ -22,7 +23,7 @@
 <style lang="scss" scoped>
   @import '~stylesheets/variables';
 
-  .form-stepper-navigation {
+  .form-stepper {
     margin-right: $baseline-space;
   }
 
@@ -36,16 +37,23 @@
   }
 
   .form-stepper-action {
-    padding: $baseline-space;
+    padding: $baseline-space / 2 $baseline-space;
     flex: 1;
     position: relative;
     border: none;
     background-color: $color-grey;
-    transition: background-color .4s $transition-ease-out;
+    transition: .4s $transition-ease-out;
+    transition-property: background-color, color;
+    color: #ccc;
+    font-size: 13px;
     text-align: left;
 
     &:focus {
       outline: none;
+    }
+
+    &:not([disabled]) {
+      cursor: pointer;
     }
 
     &:after,
@@ -60,6 +68,8 @@
     &.active {
       background-image: linear-gradient(to right, rgba(#fff, 0) 0%, #f8f8f8  100%);
       background-color: #fff;
+      color: $color-neutral;
+      font-size: 16px;
 
       &:after,
       &:before {
@@ -80,7 +90,36 @@
         border-bottom: 31px solid #fff;
         left: -15px;
       }
+
+      .form-stepper-indicator {
+        background-color: $color-neutral;
+        font-size: 18px;
+      }
     }
+
+    &.completed {
+      color: $color-positive;
+
+      .form-stepper-indicator {
+        background-color: $color-positive;
+      }
+    }
+  }
+
+  .form-stepper-indicator {
+    $size: 32px;
+
+    width: $size;
+    height: $size;
+    margin-right: 4px;
+    display: inline-block;
+    background-color: #ccc;
+    border-radius: 100%;
+    transition: .4s $transition-ease-out;
+    transition-property: background-color, color;
+    color: #fff;
+    line-height: $size;
+    text-align: center;
   }
 
   .form-stepper-content {
@@ -94,7 +133,7 @@
     opacity: 0;
 
     &.active {
-      height: 600px;
+      height: auto;
       position: absolute;
       top: 0;
       right: 0;
@@ -108,35 +147,54 @@
 <script>
   export default {
     name: 'form-stepper',
-    props: ['steps'],
+    props: {
+      steps: Array,
+      lastCompleted: {
+        type: Number,
+        default: null
+      }
+    },
     data() {
       return {
-        currentTarget: this.steps[0].target
+        currentTarget: null
+      }
+    },
+    watch: {
+      lastCompleted(activeIndex) {
+        this.setActiveStep(activeIndex - 1)
       }
     },
     methods: {
-      setActiveStep(target) {
-        const step = this.$refs.stepperContent.querySelector(target)
-
-        this.currentTarget = target
-
-        if (step) {
-          step.classList.add('active')
+      getActionClasses(counter) {
+        return {
+          active: this.currentTarget === counter,
+          completed: this.lastCompleted > counter
         }
       },
-      changeStep(target) {
+      setActiveStep(index) {
+        if (this.steps[index]) {
+          const step = this.$refs.stepperContent.querySelector(this.steps[index].target)
+
+          this.currentTarget = index + 1
+
+          if (step) {
+            step.classList.add('active')
+          }
+        }
+      },
+      changeStep(index) {
         const steps = this.$refs.stepperContent.querySelectorAll('.form-step')
 
         Array.from(steps).forEach((step) => {
           step.classList.remove('active')
         })
 
-        this.setActiveStep(target)
+        this.setActiveStep(index)
       }
     },
     mounted() {
       this.$nextTick(() => {
-        this.setActiveStep(this.steps[0].target)
+        this.setActiveStep(this.lastCompleted - 1 || 0)
       })
     }
   }
