@@ -71,6 +71,7 @@
     justify-content: flex-end;
     align-items: center;
     background-color: $color-grey;
+    border-bottom: 1px solid $color-dark-grey;
     color: #bbb;
     text-align: right;
     text-transform: uppercase;
@@ -92,24 +93,24 @@
   }
 
   .cart-security-badge {
-    padding: 10px 16px;
+    padding: $baseline-space / 2 16px;
     position: absolute;
     top: 0;
     left: 0;
     background-color: $color-positive;
-    transform: translate(-10px, -10px);
+    transform: translate(-$baseline-space / 2, -$baseline-space / 2);
     color: #fff;
     font-size: 13px;
     font-weight: 700;
 
     &:before {
       position: absolute;
-      bottom: -10px;
+      bottom: -$baseline-space / 2;
       left: 0;
       border: 0 solid transparent;
-      border-top: 10px solid #56a03f;
-      border-bottom: 10px;
-      border-left-width: 10px;
+      border-top: $baseline-space / 2 solid #56a03f;
+      border-bottom: $baseline-space / 2;
+      border-left-width: $baseline-space / 2;
       content: " ";
     }
 
