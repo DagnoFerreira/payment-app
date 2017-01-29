@@ -1,3 +1,11 @@
-$font-roboto: Roboto, sans-serif;
+$font-open-sans: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-$color-body-background: #fff;
+$baseline-space: 20px;
+
+$color-grey: #efefef;
+$color-dark-grey: darken($color-grey, 10%);
+$color-positive: #7cd063;
+
+$transition-ease-out: cubic-bezier(.25, .8, .25, 1);
+$transition-ease-in: cubic-bezier(.55, 0, .55, .2);
+$transition-ease-in-out: cubic-bezier(.35, 0, .25, 1);
