@@ -5,7 +5,11 @@ const PaymentService = new Vue({
     info: {}
   }),
   methods: {
-
+    fetchPaymentData(resource) {
+      return this.$http.get(resource, {
+        data: null
+      })
+    }
   }
 })
 

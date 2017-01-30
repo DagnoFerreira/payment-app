@@ -1,4 +1,3 @@
-import Axios from 'axios'
 import Default from './Default'
 import Mobile from './Mobile'
 import Custom from './Custom'
@@ -18,9 +17,7 @@ export default function(resolve) {
       resource = 'loadCustom'
     }
 
-    Axios.get(resource, {
-      data: null
-    }).then(response => {
+    PaymentService.fetchPaymentData(resource).then(response => {
       PaymentService.info = response.data
 
       resolve({

@@ -12,21 +12,21 @@
       </div>
 
       <div class="cart-product">
-        <h1 class="cart-product-name">Teste Hotpay</h1>
+        <h1 class="cart-product-name">{{ product.productName }}</h1>
         <p class="cart-product-disclaimer">Este é um produto digital, você receberá os dados para acessá-lo via internet.</p>
 
         <div class="cart-product-info">
           <img src="https://test-hotmart.s3.amazonaws.com/product_pictures/3d3f188a-b637-427f-900d-06ec9a2bf96a/lunchtime.jpeg" class="cart-product-image" alt="Teste Hotpay">
 
           <div class="cart-product-author">
-            <div><strong>Autor</strong>: Amazing W.</div>
-            <a href="#">Contato do vendedor</a>
+            <div><strong>Autor</strong>: {{ product.authorName }}</div>
+            <a :href="'mailto:' + product.authorEmail">Contato do vendedor</a>
           </div>
         </div>
       </div>
 
       <div class="cart-payment">
-        <strong class="cart-payment-price">R$ 3,00</strong>
+        <strong class="cart-payment-price">{{ productPayment.offerFullPrice.label }}</strong>
 
         <div class="cart-payment-discount">
           <a href="">Possui um cupom de desconto?</a>
@@ -244,7 +244,20 @@
 </style>
 
 <script>
+  import PaymentService from 'services/PaymentService'
+
   export default {
-    name: 'cart'
+    name: 'cart',
+    computed: {
+      payment() {
+        return PaymentService.info
+      },
+      product() {
+        return PaymentService.info.products && PaymentService.info.products[0]
+      },
+      productPayment() {
+        return this.product && this.product.offer.paymentInfoResponse
+      }
+    }
   }
 </script>
