@@ -1,7 +1,7 @@
 <template>
   <form class="payment-form" novalidate @submit.stop.prevent="validatePaymentData" ref="form">
-    <form-stepper :steps="steps" :last-completed="currentStep">
-      <div class="form-step" id="personal-data">
+    <form-stepper :disabled="!stepper" :steps="steps" :last-completed="currentStep">
+      <div class="form-step form-personal-data" id="personal-data">
         <div class="form-group">
           <div class="form-field">
             <label for="name">Seu Nome</label>
@@ -27,14 +27,14 @@
             </div>
           </div>
 
-          <div class="form-button">
+          <div class="form-button" v-if="stepper">
             <button type="button" class="button" @click="validatePersonalData">Próximo Passo</button>
           </div>
         </div>
       </div>
 
-      <div class="form-step" id="payment-data">
-        <p class="payment-options-label">Selecione a forma de pagamento abaixo</p>
+      <div class="form-step form-payment-data" id="payment-data">
+        <p class="payment-options-label" v-if="stepper">Selecione a forma de pagamento abaixo</p>
 
         <div class="payment-toggle">
           <button type="button" class="button button-clean button-credit-card" :class="{ 'active': paymentType === 1 }" @click="paymentType = 1">
@@ -323,7 +323,13 @@
   import Card from 'card'
 
   export default {
-    name: 'payment-footer',
+    name: 'payment-form',
+    props: {
+      stepper: {
+        type: Boolean,
+        default: true
+      }
+    },
     mixins: [validationMixin],
     data() {
       return {

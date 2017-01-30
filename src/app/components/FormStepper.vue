@@ -1,6 +1,6 @@
 <template>
   <div class="form-stepper">
-    <div class="form-stepper-navigation">
+    <div class="form-stepper-navigation" v-if="!disabled">
       <button
         class="form-stepper-action"
         type="button"
@@ -132,6 +132,10 @@
     overflow: hidden;
     opacity: 0;
 
+    &:empty {
+      display: none;
+    }
+
     &:not(.active) {
       position: absolute;
       top: 0;
@@ -151,6 +155,7 @@
   export default {
     name: 'form-stepper',
     props: {
+      disabled: Boolean,
       steps: Array,
       lastCompleted: {
         type: Number,

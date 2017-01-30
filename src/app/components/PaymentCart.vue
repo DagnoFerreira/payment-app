@@ -1,6 +1,6 @@
 <template>
   <div class="cart">
-    <div class="cart-header">
+    <div class="cart-header" v-if="!mobile">
       <span>Powered by</span>
       <img src="assets/logo-hotmart.png" alt="Hotmart">
     </div>
@@ -13,7 +13,7 @@
 
       <div class="cart-product">
         <h1 class="cart-product-name">{{ product.productName }}</h1>
-        <p class="cart-product-disclaimer">Este é um produto digital, você receberá os dados para acessá-lo via internet.</p>
+        <p class="cart-product-disclaimer" v-if="!mobile">Este é um produto digital, você receberá os dados para acessá-lo via internet.</p>
 
         <div class="cart-product-info">
           <img src="https://test-hotmart.s3.amazonaws.com/product_pictures/3d3f188a-b637-427f-900d-06ec9a2bf96a/lunchtime.jpeg" class="cart-product-image" alt="Teste Hotpay">
@@ -46,7 +46,7 @@
           <img src="assets/icon-paypal.png" alt="PayPal" title="PayPal">
         </div>
 
-        <p class="cart-payment-disclaimer">Hotmart está processando este pedido à serviço de Amazing W., ao prosseguir você está concordando com os <a href="">Termos de compra</a></p>
+        <p class="cart-payment-disclaimer" v-if="!mobile">Hotmart está processando este pedido à serviço de Amazing W., ao prosseguir você está concordando com os <a href="">Termos de compra</a></p>
 
         <p class="cart-payment-installment">*Parcelamento com tarifa de 2.49% a.m</p>
       </div>
@@ -248,6 +248,9 @@
 
   export default {
     name: 'cart',
+    props: {
+      mobile: Boolean
+    },
     computed: {
       payment() {
         return PaymentService.info
