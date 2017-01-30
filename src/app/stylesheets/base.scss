@@ -28,7 +28,80 @@ body {
 }
 
 a:not(.button) {
-  color: #689cd0;
+  margin: -2px;
+  padding: 2px;
+  display: inline-block;
+  color: $color-neutral;
+
+  &:hover {
+    color: darken($color-neutral, 10%);
+  }
+
+  &:focus {
+    margin: -3px;
+    outline: none;
+    border: 1px solid $color-neutral;
+    border-radius: 3px;
+    box-shadow: 0 0 4px 1px $color-neutral;
+  }
+}
+
+.button {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  overflow: visible;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-style: inherit;
+  font-size: 14px;
+  font-variant: inherit;
+  font-weight: 400;
+  letter-spacing: inherit;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: top;
+  white-space: nowrap;
+
+  &:not(.button-clean) {
+    height: 50px;
+    padding: 0 $baseline-space + $baseline-space / 2 5px;
+    overflow: hidden;
+    background: $color-positive;
+    box-shadow: inset -2px -5px 0 rgba(#000, .1);
+    border: 1px solid #50b232;
+    border-radius: 3px;
+    transition: .4s $transition-ease-out;
+    color: #fff;
+    font-size: 18px;
+    line-height: 40px;
+
+    &:hover,
+    &:focus {
+      background: darken($color-positive, 5%);
+      border: 1px solid darken(#50b232, 5%);
+      box-shadow: inset -2px -4px 0 rgba(#000, .15);
+    }
+
+    &:active {
+      background: darken($color-positive, 7%);
+      border: 1px solid darken(#50b232, 7%);
+      box-shadow: inset 0 0 0 1px rgba(#000, .17);
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-moz-focus-inner {
+    border:0;
+  }
 }
 
 [tabindex="-1"]:focus {

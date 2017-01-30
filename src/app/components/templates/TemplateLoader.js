@@ -24,7 +24,7 @@ export default function(resolve) {
       PaymentService.info = response.data
 
       resolve({
-        name: 'app',
+        name: 'template',
         render: mount => mount(template),
         mounted() {
           this.$emit('resolved', template.name)

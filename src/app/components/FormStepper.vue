@@ -132,12 +132,15 @@
     overflow: hidden;
     opacity: 0;
 
-    &.active {
-      height: auto;
+    &:not(.active) {
       position: absolute;
       top: 0;
       right: 0;
       left: 0;
+    }
+
+    &.active {
+      height: auto;
       opacity: 1;
       transition: opacity .5s $transition-ease-out;
     }
@@ -161,7 +164,7 @@
     },
     watch: {
       lastCompleted(activeIndex) {
-        this.setActiveStep(activeIndex - 1)
+        this.changeStep(activeIndex - 1)
       }
     },
     methods: {

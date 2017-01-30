@@ -1,0 +1,117 @@
+form {
+  color: #7e7e7e;
+}
+
+.form-group {
+  padding: 0 $baseline-space;
+
+  + .form-group {
+    margin-top: $baseline-space;
+  }
+}
+
+.form-row {
+  display: flex;
+
+  .form-field + .form-field {
+    margin-top: 0;
+    margin-left: $baseline-space;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+
+  &.form-field-33 {
+    max-width: 33%;
+    flex: 1 1 33%;
+  }
+
+  &.form-field-50 {
+    max-width: 50%;
+    flex: 1 1 50%;
+
+    label {
+      font-size: 14px;
+    }
+  }
+
+  + .form-field,
+  + .form-row {
+    margin-top: $baseline-space + $baseline-space / 2;
+  }
+
+  label {
+    margin-bottom: 8px;
+    display: block;
+    font-size: 16px;
+    line-height: 22px;
+    text-transform: uppercase;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    min-height: 45px;
+    padding: $baseline-space / 2;
+    border-radius: 3px;
+    border: 1px solid $color-dark-grey;
+    transition: .4s $transition-ease-out;
+    font-size: 16px;
+
+    &.invalid {
+      background-color: rgba($color-negative, .1);
+      border-color: $color-negative;
+      box-shadow: 0 0 4px 2 rgba($color-negative, .3);
+    }
+
+    &.valid {
+      background-color: rgba($color-positive, .1);
+      border-color: $color-positive;
+      box-shadow: 0 0 4px 2 rgba($color-positive, .3);
+    }
+
+    &:focus {
+      outline: none;
+      background-color: rgba($color-neutral, .1);
+      border-color: $color-neutral;
+      box-shadow: 0 0 4px 2 rgba($color-neutral, .3);
+    }
+
+    &::-webkit-input-placeholder {
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.5em;
+    }
+  }
+
+  .form-field-link {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 13px;
+    line-height: 22px;
+  }
+}
+
+.form-field-wrapper {
+  display: flex;
+
+  input {
+    flex: 1;
+
+    + input {
+      margin-left: $baseline-space;
+    }
+  }
+}
+
+.form-button {
+  margin-top: $baseline-space * 2;
+  margin-bottom: $baseline-space * 2;
+  text-align: right;
+}
