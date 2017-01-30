@@ -1,29 +1,29 @@
 <template>
-  <form class="payment-form" novalidate @submit.stop.prevent="$emit('submit', formData)" ref="form">
+  <form class="payment-form" novalidate @submit.stop.prevent="validatePaymentData" ref="form">
     <form-stepper :steps="steps" :last-completed="currentStep">
       <div class="form-step" id="personal-data">
         <div class="form-group">
           <div class="form-field">
             <label for="name">Seu Nome</label>
-            <input type="text" name="name" id="name" placeholder="Digite seu nome completo" v-model="formData.name" :class="getFormClasses('name')" @change="$v.formData.name.$touch">
+            <input type="text" name="name" id="name" placeholder="Digite seu nome completo" v-model="formData.name" :class="getFormClasses('name', 'firstStep')" @change="$v.formData.name.$touch">
           </div>
 
           <div class="form-field">
             <label for="email">Seu Email</label>
-            <input type="email" name="email" id="email" placeholder="Digite o e-mail que receberá o produto" v-model="formData.email" :class="getFormClasses('email')" @change="$v.formData.email.$touch">
+            <input type="email" name="email" id="email" placeholder="Digite o e-mail que receberá o produto" v-model="formData.email" :class="getFormClasses('email', 'firstStep')" @change="$v.formData.email.$touch">
           </div>
 
           <div class="form-row">
             <div class="form-field form-field-33">
               <label for="cpf">CPF/CNPJ</label>
               <a href="" class="form-field-link">Por quê?</a>
-              <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="Somente números" v-only-number v-model="formData.cpf" :class="getFormClasses('cpf')" @change="$v.formData.cpf.$touch">
+              <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="Somente números" v-only-number v-model="formData.cpf" :class="getFormClasses('cpf', 'firstStep')" @change="$v.formData.cpf.$touch">
             </div>
 
             <div class="form-field form-field-33">
               <label for="cep">CEP</label>
               <a href="" class="form-field-link">Não sei meu CEP?</a>
-              <input type="text" name="cep" id="cep" maxlength="8" placeholder="Buscar CEP" v-only-number v-model="formData.cep" :class="getFormClasses('cep')" @change="$v.formData.cep.$touch">
+              <input type="text" name="cep" id="cep" maxlength="8" placeholder="Buscar CEP" v-only-number v-model="formData.cep" :class="getFormClasses('cep', 'firstStep')" @change="$v.formData.cep.$touch">
             </div>
           </div>
 
@@ -60,26 +60,26 @@
               <div class="form-group">
                 <div class="form-field">
                   <label for="card-number">Número do cartão</label>
-                  <input type="tel" name="card-number" id="card-number" placeholder="Digite somente números" v-model="formData.card.number">
+                  <input type="tel" name="card-number" id="card-number" placeholder="Digite somente números" v-model="formData.cardNumber" :class="getFormClasses('cardNumber', 'secondStep')" @change="$v.formData.cardNumber.$touch">
                 </div>
 
                 <div class="form-field">
                   <label for="card-name">Nome no cartão</label>
-                  <input type="text" name="card-name" id="card-name" placeholder="Digite o nome impresso no cartão" v-model="formData.card.name">
+                  <input type="text" name="card-name" id="card-name" placeholder="Digite o nome impresso no cartão" v-model="formData.cardName" :class="getFormClasses('cardName', 'secondStep')" @change="$v.formData.cardName.$touch">
                 </div>
 
                 <div class="form-row">
                   <div class="form-field form-field-50">
                     <label for="card-expiry-month">Data de validade</label>
                     <div class="form-field-wrapper">
-                      <input type="tel" name="card-expiry-month" id="card-expiry-month" placeholder="**" v-model="formData.card.expiryMonth">
-                      <input type="tel" name="card-expiry-year" id="card-expiry-year" placeholder="**" v-model="formData.card.expiryYear">
+                      <input type="tel" name="card-expiry-month" id="card-expiry-month" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryMonth" :class="getFormClasses('cardExpiryMonth', 'secondStep')" @change="$v.formData.cardExpiryMonth.$touch">
+                      <input type="tel" name="card-expiry-year" id="card-expiry-year" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryYear" :class="getFormClasses('cardExpiryYear', 'secondStep')" @change="$v.formData.cardExpiryYear.$touch">
                     </div>
                   </div>
 
                   <div class="form-field form-field-50">
                     <label for="card-cvc">Código de segurança</label>
-                    <input type="tel" name="card-cvc" id="card-cvc" placeholder="3 ou 4 números" v-model="formData.card.cvc">
+                    <input type="tel" name="card-cvc" id="card-cvc" maxlength="4" placeholder="3 ou 4 números" v-only-number v-model="formData.cardCvc" :class="getFormClasses('cardCvc', 'secondStep')" @change="$v.formData.cardCvc.$touch">
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@
           </transition>
         </div>
 
-        <div class="form-button" @click="currentStep = 2">
+        <div class="form-button">
           <button type="submit" class="button">
             <span v-if="paymentType === 1">Comprar Agora</span>
             <span v-if="paymentType === 2">Gerar Boleto</span>
@@ -319,6 +319,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, email, minLength } from 'vuelidate/lib/validators'
   import CPF from 'gerador-validador-cpf'
+  import CardValidator from 'card-validator'
   import Card from 'card'
 
   export default {
@@ -348,17 +349,28 @@
           email: '',
           cpf: '',
           cep: '',
-          card: {
-            number: '',
-            name: '',
-            expiryMonth: '',
-            expiryYear: '',
-            cvc: ''
-          }
+          cardNumber: '',
+          cardName: '',
+          cardExpiryMonth: '',
+          cardExpiryYear: '',
+          cardCvc: ''
         }
       }
     },
     validations: {
+      firstStep: [
+        'formData.name',
+        'formData.email',
+        'formData.cpf',
+        'formData.cep'
+      ],
+      secondStep: [
+        'formData.cardNumber',
+        'formData.cardName',
+        'formData.cardExpiryMonth',
+        'formData.cardExpiryYear',
+        'formData.cardCvc'
+      ],
       formData: {
         name: {
           required
@@ -387,12 +399,42 @@
         cep: {
           required,
           minLength: minLength(8)
+        },
+        cardNumber: {
+          required,
+          creditCard: value => {
+            return value && CardValidator.number(value).isValid
+          }
+        },
+        cardName: {
+          required
+        },
+        cardExpiryMonth: {
+          required,
+          date() {
+            return CardValidator.expirationDate({
+              month: this.formData.cardExpiryMonth,
+              year: this.formData.cardExpiryYear
+            }).isValid
+          }
+        },
+        cardExpiryYear: {
+          required,
+          date() {
+            return CardValidator.expirationDate({
+              month: this.formData.cardExpiryMonth,
+              year: this.formData.cardExpiryYear
+            }).isValid
+          }
+        },
+        cardCvc: {
+          required
         }
       }
     },
     methods: {
-      getFormClasses(field) {
-        const source = this.$v.formData[field]
+      getFormClasses(field, step) {
+        const source = this.$v[step]['formData.' + field]
 
         if (source) {
           return {
@@ -404,13 +446,26 @@
         return ''
       },
       validatePersonalData() {
-        if (!this.$v.formData.$invalid) {
+        const source = this.$v.firstStep
+
+        if (!source.$invalid) {
           this.currentStep = 2
 
           return false
         }
 
-        this.$v.formData.$touch()
+        source.$touch()
+      },
+      validatePaymentData() {
+        const source = this.$v.secondStep
+
+        if (!source.$invalid) {
+          this.$emit('submit', this.formData)
+
+          return false
+        }
+
+        source.$touch()
       }
     },
     mounted() {
