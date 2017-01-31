@@ -1,19 +1,21 @@
 <template>
-  <div class="cart">
-    <div class="cart-header" v-if="!mobile">
+  <div class="payment-cart">
+    <div class="cart-header">
       <span>Powered by</span>
       <img src="assets/logo-hotmart.png" alt="Hotmart">
     </div>
 
-    <div class="cart-content">
+    <div class="cart-banner">
       <span class="cart-security-badge">Compra 100% Segura</span>
       <div class="cart-change-country">
         <a href="#">Alterar País</a>
       </div>
+    </div>
 
+    <div class="cart-content">
       <div class="cart-product">
         <h1 class="cart-product-name">{{ product.productName }}</h1>
-        <p class="cart-product-disclaimer" v-if="!mobile">Este é um produto digital, você receberá os dados para acessá-lo via internet.</p>
+        <p class="cart-product-disclaimer">Este é um produto digital, você receberá os dados para acessá-lo via internet.</p>
 
         <div class="cart-product-info">
           <img src="https://test-hotmart.s3.amazonaws.com/product_pictures/3d3f188a-b637-427f-900d-06ec9a2bf96a/lunchtime.jpeg" class="cart-product-image" alt="Teste Hotpay">
@@ -28,9 +30,7 @@
       <div class="cart-payment">
         <strong class="cart-payment-price">{{ productPayment.offerFullPrice.label }}</strong>
 
-        <div class="cart-payment-discount">
-          <a href="">Possui um cupom de desconto?</a>
-        </div>
+        <payment-coupon-code v-if="hasCouponCode" />
 
         <div class="cart-payment-creditcard">
           <img src="assets/icon-master.png" alt="MasterCard" title="MasterCard">
@@ -46,7 +46,7 @@
           <img src="assets/icon-paypal.png" alt="PayPal" title="PayPal">
         </div>
 
-        <p class="cart-payment-disclaimer" v-if="!mobile">Hotmart está processando este pedido à serviço de Amazing W., ao prosseguir você está concordando com os <a href="">Termos de compra</a></p>
+        <p class="cart-payment-disclaimer">Hotmart está processando este pedido à serviço de Amazing W., ao prosseguir você está concordando com os <a href="">Termos de compra</a></p>
 
         <p class="cart-payment-installment">*Parcelamento com tarifa de 2.49% a.m</p>
       </div>
@@ -56,8 +56,9 @@
 
 <style lang="scss" scoped>
   @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
-  .cart {
+  .payment-cart {
     max-width: 350px;
     border-radius: 3px;
     border: 1px solid $color-dark-grey;
@@ -86,6 +87,13 @@
     }
   }
 
+  .cart-banner {
+    padding: 0 $baseline-space $baseline-space;
+    position: relative;
+    background-color: #fff;
+    font-size: 12px;
+  }
+
   .cart-content {
     padding: 0 $baseline-space $baseline-space;
     position: relative;
@@ -102,6 +110,10 @@
     color: #fff;
     font-size: 13px;
     font-weight: 700;
+
+    @include breakpoint-xsmall {
+      padding: $baseline-space / 2;
+    }
 
     &:before {
       position: absolute;
@@ -130,7 +142,7 @@
     text-align: right;
 
     a {
-      padding: 6px 0;
+      padding: 10px 0;
       display: inline-block;
       position: relative;
       vertical-align: middle;
@@ -176,6 +188,7 @@
   }
 
   .cart-product-name {
+    margin-top: 0;
     color: #555;
     font-size: 22px;
   }
@@ -207,22 +220,6 @@
     font-size: 26px;
   }
 
-  .cart-payment-discount {
-    margin: 16px 0;
-
-    &:before {
-      width: 18px;
-      height: 18px;
-      margin-right: 5px;
-      display: inline-block;
-      background: url(~assets/icon-coupon.svg) no-repeat center;
-      background-size: 100%;
-      opacity: .45;
-      content: " ";
-      vertical-align: middle;
-    }
-  }
-
   .cart-payment-creditcard,
   .cart-payment-direct {
     img {
@@ -249,7 +246,7 @@
   export default {
     name: 'cart',
     props: {
-      mobile: Boolean
+      hasCouponCode: Boolean
     },
     computed: {
       payment() {

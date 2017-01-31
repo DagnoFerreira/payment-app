@@ -1,20 +1,20 @@
 <template>
-  <div class="form-stepper">
-    <div class="form-stepper-navigation" v-if="!disabled">
+  <div class="payment-stepper" :class="{ 'enabled': !disabled }">
+    <div class="payment-stepper-navigation" v-if="!disabled">
       <button
-        class="form-stepper-action"
+        class="payment-stepper-action"
         type="button"
         v-for="(step, counter) in steps"
         :key="step.target"
         :class="getActionClasses(counter + 1)"
         :disabled="lastCompleted < counter + 1"
         @click="changeStep(counter)">
-        <span class="form-stepper-indicator">{{ counter + 1 }}</span>
-        <span class="form-stepper-label">{{ step.name }}</span>
+        <span class="payment-stepper-indicator">{{ counter + 1 }}</span>
+        <span class="payment-stepper-label">{{ step.name }}</span>
       </button>
     </div>
 
-    <div class="form-stepper-content" ref="stepperContent">
+    <div class="payment-stepper-content" ref="stepperContent">
       <slot></slot>
     </div>
   </div>
@@ -22,13 +22,47 @@
 
 <style lang="scss" scoped>
   @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
-  .form-stepper {
-    margin-right: $baseline-space;
+  .payment-stepper {
+    &.enabled {
+      .form-step {
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+
+        &:empty {
+          display: none;
+        }
+
+        &:not(.active) {
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+        }
+
+        &.active {
+          height: auto;
+          opacity: 1;
+          transition: opacity .5s $transition-ease-out;
+        }
+      }
+    }
+
+    &:not(.enabled) {
+      .form-step + .form-step {
+        margin-top: $baseline-space * 2;
+      }
+
+      .form-group {
+        padding: 0;
+      }
+    }
   }
 
-  .form-stepper-navigation {
-    height: 64px;
+  .payment-stepper-navigation {
+    min-height: 64px;
     display: flex;
     overflow: hidden;
     border: 1px solid $color-dark-grey;
@@ -36,8 +70,10 @@
     background-color: $color-grey;
   }
 
-  .form-stepper-action {
+  .payment-stepper-action {
     padding: $baseline-space / 2 $baseline-space;
+    display: flex;
+    align-items: center;
     flex: 1;
     position: relative;
     border: none;
@@ -47,6 +83,16 @@
     color: #ccc;
     font-size: 13px;
     text-align: left;
+
+    @include breakpoint-small {
+      font-size: 12px;
+    }
+
+    @include breakpoint-xsmall {
+      padding: $baseline-space / 2;
+      flex-direction: column;
+      text-align: center;
+    }
 
     &:focus {
       outline: none;
@@ -71,6 +117,10 @@
       color: $color-neutral;
       font-size: 16px;
 
+      @include breakpoint-small {
+        font-size: 13px;
+      }
+
       &:after,
       &:before {
         opacity: 1;
@@ -91,27 +141,31 @@
         left: -15px;
       }
 
-      .form-stepper-indicator {
+      .payment-stepper-indicator {
         background-color: $color-neutral;
         font-size: 18px;
+
+        @include breakpoint-small {
+          font-size: 13px;
+        }
       }
     }
 
     &.completed {
       color: $color-positive;
 
-      .form-stepper-indicator {
+      .payment-stepper-indicator {
         background-color: $color-positive;
       }
     }
   }
 
-  .form-stepper-indicator {
+  .payment-stepper-indicator {
     $size: 32px;
 
-    width: $size;
+    min-width: $size;
     height: $size;
-    margin-right: 4px;
+    margin-right: 8px;
     display: inline-block;
     background-color: #ccc;
     border-radius: 100%;
@@ -120,40 +174,26 @@
     color: #fff;
     line-height: $size;
     text-align: center;
+
+    @include breakpoint-xsmall {
+      $size: 20px;
+
+      min-width: $size;
+      height: $size;
+      margin-bottom: 8px;
+      line-height: $size;
+    }
   }
 
-  .form-stepper-content {
+  .payment-stepper-content {
     margin-top: $baseline-space;
     position: relative;
-  }
-
-  .form-step {
-    height: 0;
-    overflow: hidden;
-    opacity: 0;
-
-    &:empty {
-      display: none;
-    }
-
-    &:not(.active) {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-    }
-
-    &.active {
-      height: auto;
-      opacity: 1;
-      transition: opacity .5s $transition-ease-out;
-    }
   }
 </style>
 
 <script>
   export default {
-    name: 'form-stepper',
+    name: 'payment-stepper',
     props: {
       disabled: Boolean,
       steps: Array,

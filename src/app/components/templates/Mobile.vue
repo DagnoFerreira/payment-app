@@ -1,45 +1,88 @@
 <template>
   <div class="payment-mobile">
-    <payment-cart mobile />
-    <payment-form :stepper="false" @submit="processPayment" />
+    <payment-cart />
+    <payment-form @submit="processPayment" />
     <payment-footer />
   </div>
 </template>
 
 <style lang="scss">
   @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
   .payment-mobile {
-    .payment-form {
-      .form-stepper {
-        margin: 0;
+    border-radius: 3px;
+    border: 1px solid $color-dark-grey;
 
-        .form-step {
-          height: auto;
-          opacity: 1;
+    .payment-cart {
+      max-width: none;
+      border: none;
+    }
 
-          + .form-step {
-            margin-top: $baseline-space * 2;
-          }
+    .cart-header {
+      display: none;
+    }
 
-          &:not(.active) {
-            position: relative;
-          }
-        }
-      }
+    .cart-banner {
+      padding-top: 25px;
+    }
 
-      .form-personal-data .form-group {
-        padding: 0;
-      }
+    .cart-security-badge {
+      transform: translate(-10px, $baseline-space);
+    }
 
-      .form-button {
-        margin-bottom: 0;
+    .cart-content {
+      background-color: $color-grey;
+    }
+
+    .cart-product-name {
+      padding-top: .7em;
+    }
+
+    .cart-product-image {
+      border-bottom: none;
+    }
+
+    .cart-product-author {
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .cart-product-disclaimer,
+    .cart-payment-disclaimer {
+      display: none;
+    }
+
+    .cart-product + .cart-payment {
+      margin-top: $baseline-space;
+      padding: 0;
+      border: none;
+
+      &:before {
+        display: none;
       }
     }
 
-    .payment-footer {
-      margin-left: 0;
-      margin-right: 0;
+    .payment-stepper-content {
+      margin: 0;
+      padding: $baseline-space;
+
+      @include breakpoint-xsmall {
+        padding: $baseline-space / 2;
+      }
+    }
+
+    .payment-toggle {
+      .button {
+        @include breakpoint-xsmall {
+          padding: 8px;
+
+          + .button {
+            margin-left: 8px;
+          }
+        }
+      }
     }
   }
 </style>

@@ -12,6 +12,7 @@
 
 <style lang="scss" scoped>
   @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
   $viewport-size: 1140px;
 
@@ -20,6 +21,10 @@
     padding: $baseline-space;
     max-width: 100%;
     margin: 0 auto;
+
+    @include breakpoint-xsmall {
+      padding: $baseline-space / 2;
+    }
   }
 
   .page-loading {

@@ -5,6 +5,10 @@ form {
 .form-group {
   padding: 0 $baseline-space;
 
+  @include breakpoint-xsmall {
+    padding: 0 $baseline-space / 2;
+  }
+
   + .form-group {
     margin-top: $baseline-space;
   }
@@ -13,9 +17,18 @@ form {
 .form-row {
   display: flex;
 
+  @include breakpoint-xsmall {
+    flex-direction: column;
+  }
+
   .form-field + .form-field {
     margin-top: 0;
     margin-left: $baseline-space;
+
+    @include breakpoint-xsmall {
+      margin-top: $baseline-space + $baseline-space / 2;
+      margin-left: 0;
+    }
   }
 }
 
@@ -28,14 +41,28 @@ form {
   &.form-field-33 {
     max-width: 33%;
     flex: 1 1 33%;
+
+    @include breakpoint-xsmall {
+      max-width: none;
+      flex: 1;
+    }
   }
 
   &.form-field-50 {
     max-width: 50%;
     flex: 1 1 50%;
 
+    @include breakpoint-xsmall {
+      max-width: none;
+      flex: 1;
+    }
+
     label {
       font-size: 14px;
+
+      @include breakpoint-xsmall {
+        font-size: 16px;
+      }
     }
   }
 

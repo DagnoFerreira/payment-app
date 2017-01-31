@@ -1,6 +1,6 @@
 <template>
   <form class="payment-form" novalidate @submit.stop.prevent="validatePaymentData" ref="form">
-    <form-stepper :disabled="!stepper" :steps="steps" :last-completed="currentStep">
+    <payment-stepper :disabled="!hasStepper" :steps="steps" :last-completed="currentStep">
       <div class="form-step form-personal-data" id="personal-data">
         <div class="form-group">
           <div class="form-field">
@@ -27,14 +27,16 @@
             </div>
           </div>
 
-          <div class="form-button" v-if="stepper">
+          <div class="form-button" v-if="hasStepper">
             <button type="button" class="button" @click="validatePersonalData">Próximo Passo</button>
           </div>
         </div>
       </div>
 
+      <payment-coupon-code v-if="hasCouponCode" />
+
       <div class="form-step form-payment-data" id="payment-data">
-        <p class="payment-options-label" v-if="stepper">Selecione a forma de pagamento abaixo</p>
+        <p class="payment-options-label" v-if="hasStepper">Selecione a forma de pagamento abaixo</p>
 
         <div class="payment-toggle">
           <button type="button" class="button button-clean button-credit-card" :class="{ 'active': paymentType === 1 }" @click="paymentType = 1">
@@ -84,7 +86,7 @@
                 </div>
               </div>
 
-              <div class="payment-credit-card-holder" ref="card"></div>
+              <div class="payment-credit-card-holder" ref="card" v-if="hasCard"></div>
             </div>
           </transition>
 
@@ -114,7 +116,7 @@
 
           <transition name="fade">
             <div class="payment-type payment-bank" v-show="paymentType === 4">
-              <h2>Veja os Bancos disponíveis:</h2>
+              <h2>Fique atento(a) aos detalhes:</h2>
 
               <div align="center">
                 <span class="beta-icon-logo-bb" title="Banco do Brasil"></span>
@@ -132,6 +134,11 @@
           </transition>
         </div>
 
+        <div class="payment-price" v-if="hasPrice">
+          <strong class="payment-price-label">Preço</strong>
+          <strong class="payment-price-value">{{ productPayment.offerFullPrice.label }}</strong>
+        </div>
+
         <div class="form-button">
           <button type="submit" class="button">
             <span v-if="paymentType === 1">Comprar Agora</span>
@@ -142,44 +149,64 @@
         </div>
       </div>
 
-      <div class="form-step" id="user-feedback">
+      <div class="form-step user-feedback" id="user-feedback">
       </div>
-    </form-stepper>
+    </payment-stepper>
   </form>
 </template>
 
-<style lang="scss">
-  .payment-options .jp-card {
-    .jp-card-front,
-    .jp-card-back {
-      background-color: #7c7c7c;
+<style lang="scss" v-if="this.hasCard">
+  @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
-      .jp-card-shiny {
-        background-color: #a8a8a8;
-      }
-
-      .jp-card-display,
-      .jp-card-lower .jp-card-expiry:before,
-      .jp-card-lower .jp-card-expiry:after {
-        opacity: .7;
+  .payment-options {
+    .jp-card-container {
+      @include breakpoint-xsmall {
+        width: 100%;
       }
     }
 
-    .jp-card-name {
-      padding-right: 8px;
-      white-space: inherit;
+    .jp-card {
+      @include breakpoint-xsmall {
+        min-width: 100%;
+      }
+
+      .jp-card-front,
+      .jp-card-back {
+        background-color: #7c7c7c;
+
+        .jp-card-shiny {
+          background-color: #a8a8a8;
+        }
+
+        .jp-card-display,
+        .jp-card-lower .jp-card-expiry:before,
+        .jp-card-lower .jp-card-expiry:after {
+          opacity: .7;
+        }
+      }
+
+      .jp-card-name {
+        padding-right: 8px;
+        white-space: inherit;
+      }
     }
   }
 </style>
 
 <style lang="scss" scoped>
   @import '~stylesheets/variables';
+  @import '~stylesheets/mixins';
 
   .payment-options-label {
     margin-top: 0;
     margin-bottom: 60px;
     font-size: 20px;
     text-align: center;
+  }
+
+  .payment-coupon-code {
+    margin: $baseline-space * 2 0;
   }
 
   .payment-toggle {
@@ -190,14 +217,30 @@
     .button {
       padding: $baseline-space;
       display: flex;
-      flex: 1 1 auto;
+      justify-content: center;
+      flex: 1;
       border: 1px solid $color-dark-grey;
       border-radius: 3px;
       box-shadow: inset 0 0 0 0 $color-neutral;
       transition: .5s $transition-ease-out;
 
+      @include breakpoint-xsmall {
+        padding: $baseline-space / 2;
+        font-size: 12px;
+      }
+
+      &:hover,
+      &:focus {
+        border-color: $color-neutral;
+        background-color: rgba($color-neutral, .1);
+      }
+
       + .button {
         margin-left: $baseline-space;
+
+        @include breakpoint-xsmall {
+          margin-left: $baseline-space / 2;
+        }
       }
 
       &.active {
@@ -220,6 +263,10 @@
         content: '';
         transform: translate3d(0, 100%, 0);
         transition: .5s $transition-ease-out;
+
+        @include breakpoint-xsmall {
+          display: none;
+        }
       }
 
       &:before {
@@ -233,16 +280,30 @@
         bottom: -41px;
       }
 
-      span:before {
-        width: 20px;
-        height: 20px;
-        margin-right: 8px;
-        display: inline-block;
-        background: no-repeat center;
-        background-size: 100%;
-        opacity: .45;
-        content: " ";
-        vertical-align: middle;
+      span {
+        display: inline-flex;
+        align-items: center;
+        text-align: left;
+
+        @include breakpoint-small {
+          text-align: center;
+        }
+
+        &:before {
+          width: 20px;
+          height: 20px;
+          margin-right: 12px;
+          display: inline-block;
+          background: no-repeat center;
+          background-size: 100%;
+          opacity: .45;
+          content: " ";
+          vertical-align: middle;
+
+          @include breakpoint-small {
+            display: none;
+          }
+        }
       }
     }
 
@@ -269,8 +330,17 @@
     border: 1px solid $color-dark-grey;
     border-radius: 3px;
 
+    @include breakpoint-xsmall {
+      border: none;
+      padding: 0;
+    }
+
     .form-group {
       padding-left: 0;
+
+      @include breakpoint-xsmall {
+        padding-right: 0;
+      }
     }
   }
 
@@ -305,6 +375,10 @@
   .payment-credit-card {
     display: flex;
 
+    @include breakpoint-small {
+      flex-direction: column;
+    }
+
     .form-group {
       flex: 1;
     }
@@ -312,6 +386,21 @@
 
   .payment-credit-card-holder {
     margin-top: 30px;
+  }
+
+  .payment-price {
+    margin-top: $baseline-space * 2;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted $color-dark-grey;
+    color: rgba(#000, .87);
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .payment-price-label {
+    color: #999;
   }
 </style>
 
@@ -321,14 +410,15 @@
   import CPF from 'gerador-validador-cpf'
   import CardValidator from 'card-validator'
   import Card from 'card'
+  import PaymentService from 'services/PaymentService'
 
   export default {
     name: 'payment-form',
     props: {
-      stepper: {
-        type: Boolean,
-        default: true
-      }
+      hasStepper: Boolean,
+      hasCouponCode: Boolean,
+      hasPrice: Boolean,
+      hasCard: Boolean
     },
     mixins: [validationMixin],
     data() {
@@ -361,6 +451,17 @@
           cardExpiryYear: '',
           cardCvc: ''
         }
+      }
+    },
+    computed: {
+      payment() {
+        return PaymentService.info
+      },
+      product() {
+        return PaymentService.info.products && PaymentService.info.products[0]
+      },
+      productPayment() {
+        return this.product && this.product.offer.paymentInfoResponse
       }
     },
     validations: {
@@ -461,11 +562,13 @@
         }
 
         source.$touch()
+
+        return true
       },
       validatePaymentData() {
         const source = this.$v.secondStep
 
-        if (!source.$invalid) {
+        if (this.validatePersonalData() && !source.$invalid) {
           this.$emit('submit', this.formData)
 
           return false
@@ -475,28 +578,30 @@
       }
     },
     mounted() {
-      this.$nextTick(() => {
-        this.creditCardIntance = new Card({
-          form: this.$refs.form,
-          container: this.$refs.card,
-          formSelectors: {
-            numberInput: '#card-number',
-            nameInput: '#card-name',
-            expiryInput: '#card-expiry-month, #card-expiry-year',
-            cvcInput: '#card-cvc'
-          },
-          messages: {
-            validDate: 'valido\naté',
-            monthYear: 'mês/ano'
-          },
-          placeholders: {
-            number: '•••• •••• •••• ••••',
-            name: 'Seu nome',
-            expiry: '••/••••',
-            cvc: '•••'
-          }
+      if (this.hasCard) {
+        this.$nextTick(() => {
+          this.creditCardIntance = new Card({
+            form: this.$refs.form,
+            container: this.$refs.card,
+            formSelectors: {
+              numberInput: '#card-number',
+              nameInput: '#card-name',
+              expiryInput: '#card-expiry-month, #card-expiry-year',
+              cvcInput: '#card-cvc'
+            },
+            messages: {
+              validDate: 'valido\naté',
+              monthYear: 'mês/ano'
+            },
+            placeholders: {
+              number: '•••• •••• •••• ••••',
+              name: 'Seu nome',
+              expiry: '••/••••',
+              cvc: '•••'
+            }
+          })
         })
-      })
+      }
     }
   }
 </script>

@@ -11,3 +11,7 @@ $color-neutral: #6ea5d6;
 $transition-ease-out: cubic-bezier(.25, .8, .25, 1);
 $transition-ease-in: cubic-bezier(.55, 0, .55, .2);
 $transition-ease-in-out: cubic-bezier(.35, 0, .25, 1);
+
+$breakpoint-xsmall: 480px !default;
+$breakpoint-small: 820px !default;
+$breakpoint-medium: 1024px !default;
