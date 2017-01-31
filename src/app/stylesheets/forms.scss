@@ -101,20 +101,20 @@ form {
     &.invalid {
       background-color: rgba($color-negative, .1);
       border-color: $color-negative;
-      box-shadow: 0 0 4px 2 rgba($color-negative, .3);
+      box-shadow: 0 0 4px 1px rgba($color-negative, .3);
     }
 
     &.valid {
       background-color: rgba($color-positive, .1);
       border-color: $color-positive;
-      box-shadow: 0 0 4px 2 rgba($color-positive, .3);
+      box-shadow: 0 0 4px 1px rgba($color-positive, .3);
     }
 
     &:focus {
       outline: none;
       background-color: rgba($color-neutral, .1);
       border-color: $color-neutral;
-      box-shadow: 0 0 4px 2 rgba($color-neutral, .3);
+      box-shadow: 0 0 4px 1px rgba($color-neutral, .3);
     }
 
     &::-webkit-input-placeholder {
