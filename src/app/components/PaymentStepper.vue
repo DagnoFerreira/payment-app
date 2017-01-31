@@ -96,8 +96,16 @@
 
     @include breakpoint-xsmall {
       padding: $baseline-space / 2;
-      flex-direction: column;
-      text-align: center;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+
+      @include breakpoint-xsmall {
+        flex-direction: column;
+        text-align: center;
+      }
     }
 
     &:focus {

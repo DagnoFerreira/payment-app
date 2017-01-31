@@ -39,13 +39,13 @@
             <div class="form-field form-field-33" v-if="productCustomization.requiredCpfOnBuy">
               <label for="document">CPF/CNPJ</label>
               <a href="" class="form-field-link">Por quê?</a>
-              <input type="text" name="document" id="document" maxlength="14" placeholder="Somente números" v-only-number v-model="formData.document" :class="getFormClasses('document', 'firstStep')" @change="$v.formData.document.$touch">
+              <input type="tel" name="document" id="document" maxlength="14" placeholder="Somente números" v-only-number v-model="formData.document" :class="getFormClasses('document', 'firstStep')" @change="$v.formData.document.$touch">
             </div>
 
             <div class="form-field form-field-33">
               <label for="cep">CEP</label>
               <a href="" class="form-field-link">Não sei meu CEP?</a>
-              <input type="text" name="cep" id="cep" maxlength="8" placeholder="Buscar CEP" v-only-number v-model="formData.cep" :class="getFormClasses('cep', 'firstStep')" @change="$v.formData.cep.$touch">
+              <input type="tel" name="cep" id="cep" maxlength="8" placeholder="Buscar CEP" v-only-number v-model="formData.cep" :class="getFormClasses('cep', 'firstStep')" @change="$v.formData.cep.$touch">
             </div>
           </div>
 
