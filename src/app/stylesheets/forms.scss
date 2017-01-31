@@ -10,7 +10,7 @@ form {
   }
 
   + .form-group {
-    margin-top: $baseline-space;
+    margin-top: $baseline-space + $baseline-space / 2;
   }
 }
 
@@ -19,7 +19,7 @@ form {
 
   + .form-field,
   + .form-row {
-    margin-top: $baseline-space;
+    margin-top: $baseline-space + $baseline-space / 2;
   }
 
   @include breakpoint-xsmall {
