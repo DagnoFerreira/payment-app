@@ -1,6 +1,6 @@
 <template>
   <div class="payment-custom">
-    <payment-form has-coupon-code has-price has-card @submit="processPayment" />
+    <payment-form has-coupon-code has-price has-card />
     <payment-footer />
   </div>
 </template>
@@ -18,11 +18,6 @@
 
 <script>
   export default {
-    name: 'payment-custom',
-    methods: {
-      processPayment(data) {
-        console.log(data)
-      }
-    }
+    name: 'payment-custom'
   }
 </script>

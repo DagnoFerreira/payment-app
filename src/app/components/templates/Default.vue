@@ -1,7 +1,7 @@
 <template>
   <div class="payment-default">
     <div class="form-content">
-      <payment-form has-stepper has-card @submit="processPayment" />
+      <payment-form has-stepper has-card />
       <payment-footer />
     </div>
 
@@ -88,11 +88,6 @@
 
 <script>
   export default {
-    name: 'payment-default',
-    methods: {
-      processPayment(data) {
-        console.log(data)
-      }
-    }
+    name: 'payment-default'
   }
 </script>

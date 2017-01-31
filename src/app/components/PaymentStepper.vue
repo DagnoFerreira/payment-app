@@ -46,12 +46,16 @@
           height: auto;
           opacity: 1;
           transition: opacity .5s $transition-ease-out;
+
+          .payment-success {
+            position: relative;
+          }
         }
       }
     }
 
     &:not(.enabled) {
-      .form-step + .form-step {
+      .form-step + .form-step:not(.user-feedback) {
         margin-top: $baseline-space * 2;
       }
 
@@ -238,6 +242,7 @@
         })
 
         this.setActiveStep(index)
+        this.$emit('change', index + 1)
       }
     },
     mounted() {

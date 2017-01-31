@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-coupon-code">
+  <div class="payment-coupon-code" v-if="productCustomization.showCouponOption">
     <a href="">Possui um cupom de desconto?</a>
   </div>
 </template>
@@ -26,7 +26,14 @@
 </style>
 
 <script>
+  import PaymentService from 'services/PaymentService'
+
   export default {
-    name: 'payment-coupon-code'
+    name: 'payment-coupon-code',
+    computed: {
+      productCustomization() {
+        return PaymentService.productCustomization
+      }
+    }
   }
 </script>

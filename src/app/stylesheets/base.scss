@@ -72,8 +72,8 @@ a:not(.button) {
     padding: 0 $baseline-space + $baseline-space / 2 5px;
     overflow: hidden;
     background: $color-positive;
-    box-shadow: inset -2px -5px 0 rgba(#000, .1);
     border: 1px solid #50b232;
+    box-shadow: inset -2px -5px 0 rgba(#000, .1);
     border-radius: 3px;
     transition: .4s $transition-ease-out;
     color: #fff;
@@ -92,6 +92,25 @@ a:not(.button) {
       background: darken($color-positive, 7%);
       border: 1px solid darken(#50b232, 7%);
       box-shadow: inset 0 0 0 1px rgba(#000, .17);
+    }
+
+    &.button-secondary {
+      background: $color-neutral;
+      border: 1px solid darken($color-neutral, 10%);
+      box-shadow: inset -2px -5px 0 rgba(#000, .1);
+
+      &:hover,
+      &:focus {
+        background: darken($color-neutral, 5%);
+        border: 1px solid darken(darken($color-neutral, 10%), 5%);
+        box-shadow: inset -2px -4px 0 rgba(#000, .15);
+      }
+
+      &:active {
+        background: darken($color-neutral, 7%);
+        border: 1px solid darken(darken($color-neutral, 10%), 7%);
+        box-shadow: inset 0 0 0 1px rgba(#000, .17);
+      }
     }
   }
 

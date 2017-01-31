@@ -17,6 +17,11 @@ form {
 .form-row {
   display: flex;
 
+  + .form-field,
+  + .form-row {
+    margin-top: $baseline-space;
+  }
+
   @include breakpoint-xsmall {
     flex-direction: column;
   }
@@ -56,14 +61,6 @@ form {
       max-width: none;
       flex: 1;
     }
-
-    label {
-      font-size: 14px;
-
-      @include breakpoint-xsmall {
-        font-size: 16px;
-      }
-    }
   }
 
   + .form-field,
@@ -75,19 +72,31 @@ form {
     margin-bottom: 8px;
     display: block;
     font-size: 16px;
-    line-height: 22px;
+    line-height: 1.37em;
     text-transform: uppercase;
+
+    &.small {
+      font-size: 13px;
+
+      @include breakpoint-xsmall {
+        font-size: 16px;
+      }
+    }
   }
 
   input,
-  textarea {
+  select {
     width: 100%;
-    min-height: 45px;
+    height: 45px;
     padding: $baseline-space / 2;
     border-radius: 3px;
     border: 1px solid $color-dark-grey;
     transition: .4s $transition-ease-out;
     font-size: 16px;
+
+    &.small {
+      max-width: 80px;
+    }
 
     &.invalid {
       background-color: rgba($color-negative, .1);

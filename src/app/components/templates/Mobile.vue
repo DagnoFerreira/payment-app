@@ -1,7 +1,7 @@
 <template>
   <div class="payment-mobile">
     <payment-cart />
-    <payment-form @submit="processPayment" />
+    <payment-form />
     <payment-footer />
   </div>
 </template>
@@ -89,11 +89,6 @@
 
 <script>
   export default {
-    name: 'payment-mobile',
-    methods: {
-      processPayment(data) {
-        console.log(data)
-      }
-    }
+    name: 'payment-mobile'
   }
 </script>

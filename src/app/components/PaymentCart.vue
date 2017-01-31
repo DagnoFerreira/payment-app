@@ -28,7 +28,7 @@
       </div>
 
       <div class="cart-payment">
-        <strong class="cart-payment-price">{{ productPayment.offerFullPrice.label }}</strong>
+        <strong class="cart-payment-price">{{ productPrice }}</strong>
 
         <payment-coupon-code v-if="hasCouponCode" />
 
@@ -255,8 +255,8 @@
       product() {
         return PaymentService.info.products && PaymentService.info.products[0]
       },
-      productPayment() {
-        return this.product && this.product.offer.paymentInfoResponse
+      productPrice() {
+        return PaymentService.productPrice
       }
     }
   }
