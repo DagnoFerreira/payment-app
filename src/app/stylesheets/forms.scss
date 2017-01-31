@@ -137,9 +137,11 @@ form {
 .form-field-wrapper {
   display: flex;
 
-  input {
+  > div,
+  > input {
     flex: 1;
 
+    + div,
     + input {
       margin-left: $baseline-space;
     }

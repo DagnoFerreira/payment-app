@@ -96,8 +96,13 @@
                   <div class="form-field form-field-50">
                     <label class="small" for="card-expiry-month">Data de validade</label>
                     <div class="form-field-wrapper">
-                      <input type="tel" name="card-expiry-month" id="card-expiry-month" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryMonth" :class="getFormClasses('cardExpiryMonth', 'secondStep')" @change="$v.formData.cardExpiryMonth.$touch">
-                      <input type="tel" name="card-expiry-year" id="card-expiry-year" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryYear" :class="getFormClasses('cardExpiryYear', 'secondStep')" @change="$v.formData.cardExpiryYear.$touch">
+                      <div>
+                        <input type="tel" name="card-expiry-month" id="card-expiry-month" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryMonth" :class="getFormClasses('cardExpiryMonth', 'secondStep')" @change="$v.formData.cardExpiryMonth.$touch">
+                      </div>
+
+                      <div>
+                        <input type="tel" name="card-expiry-year" id="card-expiry-year" maxlength="2" placeholder="**" v-only-number v-model="formData.cardExpiryYear" :class="getFormClasses('cardExpiryYear', 'secondStep')" @change="$v.formData.cardExpiryYear.$touch">
+                      </div>
                     </div>
                   </div>
 

@@ -9,8 +9,10 @@
         :class="getActionClasses(counter + 1)"
         :disabled="lastCompleted < counter + 1"
         @click="changeStep(counter)">
-        <span class="payment-stepper-indicator">{{ counter + 1 }}</span>
-        <span class="payment-stepper-label">{{ step.name }}</span>
+        <div>
+          <span class="payment-stepper-indicator">{{ counter + 1 }}</span>
+          <span class="payment-stepper-label">{{ step.name }}</span>
+        </div>
       </button>
     </div>
 
