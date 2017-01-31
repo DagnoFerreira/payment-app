@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="sass">
   @import '~stylesheets/variables';
   @import '~stylesheets/mixins';
 
