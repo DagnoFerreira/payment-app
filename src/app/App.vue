@@ -37,7 +37,7 @@
     bottom: 0;
     left: 0;
     z-index: 2;
-    background-color: #fff;
+    background-color: rgba(#fff, .4);
     transition: opacity .4s $transition-ease-out;
 
     &.fade-leave-active {

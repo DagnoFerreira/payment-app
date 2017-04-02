@@ -6,18 +6,19 @@ import devMiddleware from 'webpack-dev-middleware'
 import hotMiddleware from 'webpack-hot-middleware'
 import historyApiFallback from 'connect-history-api-fallback'
 import config from '../config'
-import webpackConfig from '../webpack/dev'
+import webpackConfig from '../webpack/development'
 
 const app = express()
 const compiler = webpack(webpackConfig)
-const hotMiddlewareInstance = hotMiddleware(compiler)
+const rootPath = path.join(__dirname, '..', '..')
 const devMiddlewareInstance = devMiddleware(compiler, {
+  quiet: true,
   publicPath: config.publicPath,
-  index: config.indexPath,
-  stats: {
-    colors: true,
-    chunks: false
-  }
+  index: config.indexPath
+})
+
+const hotMiddlewareInstance = hotMiddleware(compiler, {
+  log() { }
 })
 
 compiler.plugin('compilation', (compilation) => {
@@ -28,18 +29,21 @@ compiler.plugin('compilation', (compilation) => {
 })
 
 app.use(historyApiFallback())
-app.use(hotMiddlewareInstance)
 app.use(devMiddlewareInstance)
-app.use('/assets', express.static(path.join(__dirname, '..', '..', config.assetsPath)))
+app.use(hotMiddlewareInstance)
+app.use('/', express.static(path.join(rootPath)))
+app.use('/assets', express.static(path.join(rootPath, config.assetsPath)))
+
+devMiddlewareInstance.waitUntilValid(() => {
+  let uri = 'http://localhost:' + config.server.port
+
+  console.log(chalk.blue('> Listening at ' + uri + '\n'))
+})
 
 export default app.listen(config.server.port, (error) => {
-  const uri = 'http://localhost:' + config.server.port
-
   if (error) {
-    console.warn(chalk.red(error))
+    console.log(chalk.red(error))
 
     return
   }
-
-  console.log(chalk.blue(`\nListening at ${uri}\n`))
 })

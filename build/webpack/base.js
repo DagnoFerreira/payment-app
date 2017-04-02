@@ -3,6 +3,10 @@ import webpack from 'webpack'
 import eslintFormatter from 'eslint-friendly-formatter'
 import config from '../config'
 
+const resolvePath = (dir) => {
+  return path.resolve(__dirname, '..', '..', dir)
+}
+
 export default {
   entry: {
     app: './src/app/index.js'
@@ -10,80 +14,50 @@ export default {
   output: {
     path: config.rootPath,
     publicPath: config.publicPath,
-    filename: '[name].js'
+    filename: '[name].js',
+    chunkFilename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.vue', '.js'],
-    fallback: [config.nodePath],
+    extensions: ['.js', '.vue', '.json'],
     alias: {
-      stylesheets: path.resolve(__dirname, '../../src/app/stylesheets'),
-      services: path.resolve(__dirname, '../../src/app/services'),
-      assets: path.resolve(__dirname, '../../src/assets')
+      assets: resolvePath('src/assets'),
+      core: resolvePath('src/app/core'),
+      stylesheets: resolvePath('src/app/stylesheets'),
+      services: resolvePath('src/app/services')
     }
   },
-  resolveLoader: {
-    fallback: [config.nodePath]
-  },
   module: {
-    preLoaders: [
+    rules: [
       {
-        test: /\.vue$/,
-        loader: 'eslint',
-        include: config.projectRoot,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: config.projectRoot,
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
-      {
-        test: /\.vue$/,
-        loader: 'vue'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel',
-        include: config.projectRoot,
-        exclude: /node_modules/,
-        query: {
-          cacheDirectory: true
+        test: /\.(js|vue)$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        include: [
+          resolvePath('build'),
+          resolvePath('src')
+        ],
+        options: {
+          fix: true,
+          formatter: eslintFormatter
         }
       },
       {
-        test: /\.css$/,
-        loader: 'vue-style-loader!css-loader'
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [
+          resolvePath('build'),
+          resolvePath('src')
+        ]
       },
       {
-        test: /\.scss$/,
-        loader: 'vue-style-loader!css-loader!sass-loader'
-      },
-      {
-        test: /\.html$/,
-        loader: 'vue-html'
-      },
-      {
-        test: /\.(png|jpg|gif|svg)(\?.*)?$/,
-        loader: 'url',
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
         query: {
           limit: 10000,
-          name: '/assets/images/[name].[ext]'
+          name: '/assets/[name].[hash:8].[ext]'
         }
       }
     ]
-  },
-  eslint: {
-    fix: true,
-    formatter: eslintFormatter
-  },
-  vue: {
-    loaders: {
-      css: 'vue-style-loader!css-loader',
-      scss: 'vue-style-loader!css-loader!sass-loader'
-    }
   },
   plugins: [
     new webpack.DefinePlugin({
