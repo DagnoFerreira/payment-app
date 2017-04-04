@@ -8,8 +8,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import OptimizeJsPlugin from 'optimize-js-plugin'
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import mediaPacker from 'css-mqpacker'
+import OfflinePlugin from 'offline-plugin'
 import config from '../config'
 import baseConfig from './base'
+
+baseConfig.entry.app.push('./build/server/offline')
 
 export default merge(baseConfig, {
   output: {
@@ -59,8 +62,7 @@ export default merge(baseConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"',
-        ...config.env
+        NODE_ENV: '"production"'
       }
     }),
     new webpack.LoaderOptionsPlugin({
@@ -128,6 +130,7 @@ export default merge(baseConfig, {
     }),
     new OptimizeCssAssetsPlugin({
       canPrint: false
-    })
+    }),
+    new OfflinePlugin()
   ]
 })

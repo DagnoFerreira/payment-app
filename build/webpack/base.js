@@ -9,7 +9,9 @@ const resolvePath = (dir) => {
 
 export default {
   entry: {
-    app: './src/app/index.js'
+    app: [
+      './src/app/index.js'
+    ]
   },
   output: {
     path: config.rootPath,
@@ -20,10 +22,11 @@ export default {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      assets: resolvePath('src/assets'),
-      core: resolvePath('src/app/core'),
+      app: resolvePath('src/app'),
+      services: resolvePath('src/app/services'),
       stylesheets: resolvePath('src/app/stylesheets'),
-      services: resolvePath('src/app/services')
+      assets: resolvePath('src/assets'),
+      core: resolvePath('src/app/core')
     }
   },
   module: {
