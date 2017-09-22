@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style lang="sass">
+<style lang="scss">
   @import '~stylesheets/variables';
   @import '~stylesheets/mixins';
 

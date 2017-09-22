@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<style lang="sass">
+<style lang="scss">
   @import '~stylesheets/variables';
 
   .payment-custom {

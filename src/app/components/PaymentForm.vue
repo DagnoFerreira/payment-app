@@ -199,7 +199,7 @@
   </form>
 </template>
 
-<style lang="scss" v-if="this.hasCard">
+<style lang="scss">
   @import '~stylesheets/variables';
   @import '~stylesheets/mixins';
 
