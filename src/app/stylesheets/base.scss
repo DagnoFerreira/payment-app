@@ -7,11 +7,16 @@
   background-color: inherit;
 }
 
+.form-field input { 
+  color: #FFF !important;
+}
+
 img:not([src*=".svg"]):not([alt="Hotmart"]), 
 video, 
 .button, 
 .cart-security-badge, 
-.valid {  
+.valid,
+.invalid {  
   filter: invert(100%);
 }
 
