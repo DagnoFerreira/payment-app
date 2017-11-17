@@ -12,7 +12,7 @@ const config = {
     port: process.env.PORT || '8080'
   },
   env: {
-    API_URL: '"http://weathered-lake-9133.getsandbox.com/"'
+    API_URL: '"https://weathered-lake-9133.getsandbox.com/"'
   }
 }
 
