@@ -61,19 +61,19 @@
         <p class="payment-options-label" v-if="hasStepper">Selecione a forma de pagamento abaixo</p>
 
         <div class="payment-toggle">
-          <button type="button" class="button button-clean button-credit-card" :class="{ 'active': paymentSelected === 'CREDIT_CARD' }" @click="paymentSelected = 'CREDIT_CARD'" v-if="productCustomization.offerCreditCard">
+          <button type="button" class="button button-clean button-credit-card" :class="{ 'active': paymentSelected === 'CREDIT_CARD' }" @click="setSelectedPayment('CREDIT_CARD')" v-if="productCustomization.offerCreditCard">
             <span>Cartão de Crédito</span>
           </button>
 
-          <button type="button" class="button button-clean button-billet" :class="{ 'active': paymentSelected === 'BILLET' }" @click="paymentSelected = 'BILLET'" v-if="productCustomization.offerBillet">
+          <button type="button" class="button button-clean button-billet" :class="{ 'active': paymentSelected === 'BILLET' }" @click="setSelectedPayment('BILLET')" v-if="productCustomization.offerBillet">
             <span>Boleto</span>
           </button>
 
-          <button type="button" class="button button-clean button-paypal" :class="{ 'active': paymentSelected === 'PAYPAL' }" @click="paymentSelected = 'PAYPAL'" v-if="productCustomization.offerPaypal">
+          <button type="button" class="button button-clean button-paypal" :class="{ 'active': paymentSelected === 'PAYPAL' }" @click="setSelectedPayment('PAYPAL')" v-if="productCustomization.offerPaypal">
             <span>PayPal</span>
           </button>
 
-          <button type="button" class="button button-clean button-debit" :class="{ 'active': paymentSelected === 'DIRECT_BEBIT' }" @click="paymentSelected = 'DIRECT_BEBIT'" v-if="productCustomization.offerDirectDebit">
+          <button type="button" class="button button-clean button-debit" :class="{ 'active': paymentSelected === 'DIRECT_BEBIT' }" @click="setSelectedPayment('DIRECT_BEBIT')" v-if="productCustomization.offerDirectDebit">
             <span>Débito Bancário</span>
           </button>
         </div>
@@ -573,52 +573,22 @@
           required
         },
         document: {
-          required,
-          minLength: minLength(11),
-          document: value => {
-            if (value) {
-              const newValue = value.toString().replace(/[^a-z0-9]|\s+|\r?\n|\r/gmi, '')
-
-              if (newValue.length > 11) {
-                return true
-              }
-
-              return CPF.validate(value)
-            }
-
-            return false
-          }
+          required
         },
         cep: {
-          required,
-          minLength: minLength(8)
+          required
         },
         cardNumber: {
-          required,
-          creditCard: value => {
-            return value && CardValidator.number(value).isValid
-          }
+          required
         },
         cardName: {
           required
         },
         cardExpiryMonth: {
-          required,
-          date() {
-            return CardValidator.expirationDate({
-              month: this.formData.cardExpiryMonth,
-              year: this.formData.cardExpiryYear
-            }).isValid
-          }
+          required
         },
         cardExpiryYear: {
-          required,
-          date() {
-            return CardValidator.expirationDate({
-              month: this.formData.cardExpiryMonth,
-              year: this.formData.cardExpiryYear
-            }).isValid
-          }
+          required
         },
         cardCvc: {
           required
@@ -662,6 +632,7 @@
         const source = this.$v.firstStep
 
         if (!source.$invalid) {
+          window.ht('send', 'checkoutFirstStep');
           this.currentStep = 2
         }
 
@@ -709,6 +680,7 @@
           ]
         }).then(response => {
           if (response.data.status === 'ok') {
+            window.ht('send', 'checkoutFinal', this.paymentSelected );
             this.submitSuccess = true
             this.currentStep = 3
           }
@@ -716,6 +688,10 @@
       },
       reloadApp() {
         window.location.reload()
+      },
+      setSelectedPayment(method) {
+        this.paymentSelected = method;
+        window.ht('send', 'checkoutFinal', method);
       }
     },
     mounted() {
