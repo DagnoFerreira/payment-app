@@ -650,7 +650,7 @@
         source.$touch()
       },
       submitFormData() {
-        this.$http.post('payment', {
+        const data = {
           checkoutToken: this.payment.checkoutToken,
           shopper: {
             name: this.formData.firstName + ' ' + this.formData.lastName,
@@ -678,9 +678,11 @@
               payload: '{"offerCode":"3ie02n3c","affiliations":[{"reference":"G4370575B"}]}'
             }
           ]
-        }).then(response => {
+        };
+
+        this.$http.post('payment', data).then(response => {
           if (response.data.status === 'ok') {
-            window.ht('send', 'checkoutFinal', this.paymentSelected );
+            window.ht('send', 'checkoutFinal', data);
             this.submitSuccess = true
             this.currentStep = 3
           }
@@ -691,7 +693,7 @@
       },
       setSelectedPayment(method) {
         this.paymentSelected = method;
-        window.ht('send', 'checkoutFinal', method);
+        window.ht('send', 'selectPaymentMethod', method);
       }
     },
     mounted() {
