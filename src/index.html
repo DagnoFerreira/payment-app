@@ -13,21 +13,6 @@
     <meta name="description" content="Hotmart Payment Widget">
 
     <title>Hotmart Pay</title>
-    <script type='text/javascript'>
-      var appName = 'payment-app';
-      (function(window, document, variableName, scriptElement, firstScript) {
-        window[variableName] || (window[variableName] = function() {
-          (window[variableName].q = window[variableName].q || []).push(arguments);
-        });
-        scriptElement = document.createElement('script'),
-        firstScript = document.scripts[0];
-        scriptElement.src = 'https://cdn.rawgit.com/wallysson-hotmart/c3c5a8907c1fefdc28cf3e8dbf0dd1e5/raw/2bbf55befdf789d3015715ac1a1077361e9d3c4a/tracking.js';
-        firstScript.parentNode.insertBefore(scriptElement, firstScript)
-      }(window, document, 'ht'));
-
-      ht('create', 'payment-app');
-      ht('send', 'pageview');
-    </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
   </head>
 
