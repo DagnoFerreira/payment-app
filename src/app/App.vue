@@ -14,7 +14,7 @@
   @import '~stylesheets/variables';
   @import '~stylesheets/mixins';
 
-  $viewport-size: 1140px;
+  $viewport-size: 1135px;
 
   .container {
     width: $viewport-size + $baseline-space * 2;
